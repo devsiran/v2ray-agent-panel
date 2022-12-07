@@ -5,9 +5,7 @@ import urllib
 import os
 
 # <Config Vars>
-servers_hash = [
-{SERVER_HASH_HERE}
-]
+servers_hash = {SERVER_HASH_HERE}
 apiAddress = "{ADMIN_ADDRESS_HERE}"
 # </Config Vars>
 

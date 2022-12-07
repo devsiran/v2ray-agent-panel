@@ -231,7 +231,68 @@ class Welcome extends CI_Controller {
 				}
 				$panelInfo['resellers'] = $this->reseller->getMyResellers($me);
 			}
+			else if($page=="servers"){
+				$this->load->model("server");
+				$panelInfo['servers'] = $this->server->getResellerServers($me->id);
+				if(isset($_POST['newServerName'],$_POST['newServerDesc'],$_POST['newServerAddress'],$_POST['newServerUser'],$_POST['newServerPass'])){
+					if($canEdit){
+						$newServerName = $_POST['newServerName'];
+						$newServerDesc = $_POST['newServerDesc'];
+						$newServerAddress = $_POST['newServerAddress'];
+						$newServerUser = $_POST['newServerUser'];
+						$newServerPass = $_POST['newServerPass'];
+						$res = $this->setupNewServer($me,$newServerName,$newServerDesc,$newServerAddress,$newServerUser,$newServerPass);
+						if($res===true){
+							array_push($messages,["success","سرور با موفقیت اضافه شد."]);
+						}
+						else{
+							array_push($messages,["danger",$res]);
+						}
+					}
+					else{
+						array_push($messages,["danger","ساخت سرور به دلایل امنیتی انجام نشد. لطفا مجدد امتحان کنید."]);
+					}
+					
+				}
+			}
 			$this->load->view("admin",["me"=>$me,"panelInfo" => $panelInfo,"page" => $page,"token" => $token,"messages"=>$messages]);
+		}
+	}
+
+	private function getRandomKey($s){
+		return(md5($s . "/" . time() . rand(10000,9999999) . "DevsIran"));
+	}
+
+	private function setupNewServer($me,$name,$adminDesc,$ip,$seruser,$serpass){
+		$protos = [
+			"trojan_gRPC" => $this->getRandomKey("trojan_gRPC"),
+			"VLESS_gRPC" => $this->getRandomKey("VLESS_gRPC"),
+			"VLESS_TCP" => $this->getRandomKey("VLESS_TCP"),
+			"trojan_TCP" => $this->getRandomKey("trojan_TCP"),
+			"VLESS_WS" => $this->getRandomKey("VLESS_WS"),
+			// "VMess_WS" => $this->getRandomKey("VMess_WS")
+		];
+		try{
+			set_time_limit(300);
+			$admin_address = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . "/s/";
+			include_once(APPPATH . "/ssh/Net/SSH2.php");
+			$ssh = new Net_SSH2($ip);
+			if (@$ssh->login($seruser, $serpass)) {
+				$ssh->exec("curl -O https://raw.githubusercontent.com/devsiran/v2ray-agent-panel/main/ser.py");
+				$ssh->exec("sed -i 's/{SERVER_HASH_HERE}/" . json_encode($protos) . "/' ser.py");
+				$ssh->exec("sed -i 's/{ADMIN_ADDRESS_HERE}/" . $admin_address . "/' ser.py");
+				$ssh->exec("bash <(curl -Ls https://raw.githubusercontent.com/devsiran/v2ray-agent-panel/main/ser.sh)");
+				$ssh->exec("python3 ser.py &");
+				$this->load->model("server");
+				$this->server->addServers($me,$name,$adminDesc,$ip,$protos);
+				return true;
+			}
+			else{
+				return "امکان اتصال به سرور وجود ندارد.";
+			}
+		}
+		catch(Exception $e) {
+			return('Failed: ' .$e->getMessage());
 		}
 	}
 

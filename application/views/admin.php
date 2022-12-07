@@ -141,15 +141,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                                     <input type="hidden" name="token" value="<?php echo $token; ?>">
                                     <div class="form-group">
                                         <label for="newResellerName" class="form-control-label">نام کاربری</label>
-                                        <input required class="form-control" type="text" name="newResellerName" id="newResellerName" required>
+                                        <input required class="form-control" type="text" name="newResellerName" id="newResellerName">
                                     </div>
                                     <div class="form-group">
                                         <label for="newResellerPass" class="form-control-label">پسورد</label>
-                                        <input required class="form-control" type="password" name="newResellerPass" id="newResellerPass" required>
+                                        <input required class="form-control" type="password" name="newResellerPass" id="newResellerPass">
                                     </div>
                                     <div class="form-group">
                                         <label for="newResellerCharge" class="form-control-label">شارژ (روز)</label>
-                                        <input required class="form-control" type="number" name="newResellerCharge" id="newResellerCharge" required>
+                                        <input required class="form-control" type="number" name="newResellerCharge" id="newResellerCharge">
                                     </div>
                                     <label class="custom-toggle">
                                         <input type="checkbox" name="newResellerIsAdmin">
@@ -268,6 +268,90 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                         </div>
                     </div>
                 </form>
+                <?php
+            }
+            else if($page=="servers"){
+                ?>
+                <div class="card">
+                    <div class="card-header">سرور ها</div>
+                    <div class="card-body">
+                        <button data-toggle="modal" data-target="#newServerModal" class="btn btn-success btn-sm"><i class="ni ni-fat-add"></i> سرور جدید</button>
+                        <form action="" method="post" class="modal fade" id="newServerModal" tabindex="-1" role="dialog" aria-labelledby="newServerModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="newServerModalLabel">سرور جدید</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" name="token" value="<?php echo $token; ?>">
+                                    <div class="form-group">
+                                        <label for="newServerName" class="form-control-label">نام سرور</label>
+                                        <input required class="form-control" type="text" name="newServerName" id="newServerName">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newServerDesc" class="form-control-label">توضیحات (اختیاری)</label>
+                                        <textarea class="form-control" name="newServerDesc" id="newServerDesc"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newServerAddress" class="form-control-label">آدرس دامنه</label>
+                                        <input required class="form-control" type="text" name="newServerAddress" id="newServerAddress">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newServerUser" class="form-control-label">نام کاربری سرور</label>
+                                        <input required class="form-control" type="text" name="newServerUser" id="newServerUser" value="root">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newServerPass" class="form-control-label">پسورد سرور</label>
+                                        <input required class="form-control" type="password" name="newServerPass" id="newServerPass">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                                    <button type="submit" class="btn btn-success">ایجاد</button>
+                                </div>
+                                </div>
+                            </div>
+                        </form>
+                        <br><br>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <th>#</th>
+                                    <th>نام سرور</th>
+                                    <th>توضیحات</th>
+                                    <th>آی پی</th>
+                                    <th>هش</th>
+                                    <th>پروتکل</th>
+                                    <th></th>
+                                </thead>
+                                <tbody>
+                                <?php
+                                $i=0;
+                                foreach($panelInfo['servers'] as $row){
+                                    $i+=1;
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $i; ?></td>
+                                        <td><?php echo $row->name; ?></td>
+                                        <td><?php echo $row->adminDesc; ?></td>
+                                        <td><?php echo $row->serverIP; ?></td>
+                                        <td><?php echo $row->serverHash; ?></td>
+                                        <td><?php echo $row->serverProto; ?></td>
+                                        <td style="width: 250px;text-align:center">
+                                            Soon!
+                                        </td>
+                                    </tr>
+                                    <?php
+                                }
+                                ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
                 <?php
             }
             else{

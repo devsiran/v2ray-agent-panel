@@ -70,4 +70,47 @@ class Server extends CI_Model{
         return false;
     }
 
+    public function addServers($me,$name,$adminDesc,$ip,$protos){
+        foreach($protos as $key=>$val){
+            $data = [
+                "name" => $name,
+                "adminDesc" => $adminDesc,
+                "serverConfig" => $this->getServerConfig($name,$ip,$key),
+                "serverIP" => $ip,
+                "serverHash" => $val,
+                "serverProto" => $key
+            ];
+            $this->db->insert("servers",$data);
+            $insert_id = $this->db->insert_id();
+            $data = [
+                "resellerID" => $me->id,
+                "serverID" => $insert_id
+            ];
+            $this->db->insert("resellerservers",$data);
+        }
+    }
+
+    private function getServerConfig($serverName,$ip,$proto){
+        switch($proto){
+            case 'trojan_gRPC':
+                return "trojan://{userRandomKey}@" . $ip . ":443?encryption=none&peer=" . $ip . "&security=tls&type=grpc&sni=" . $ip . "&alpn=h2&path=uodltrojangrpc&serviceName=uodltrojangrpc#{userFullName}";
+                break;
+            case 'VLESS_gRPC':
+                return "vless://{userRandomKey}@" . $ip . ":443?encryption=none&security=tls&type=grpc&host=" . $ip . "&path=uodlgrpc&serviceName=uodlgrpc&alpn=h2&sni=" . $ip . "#{userFullName}";
+                break;
+            case 'VLESS_TCP':
+                return "vless://{userRandomKey}@" . $ip . ":443?encryption=none&security=xtls&type=tcp&host=" . $ip . "&headerType=none&sni=" . $ip . "&flow=xtls-rprx-splice#{userFullName}";
+                break;
+            case 'trojan_TCP':
+                return "trojan://{userRandomKey}@" . $ip . ":443?peer=" . $ip . "&sni=" . $ip . "&alpn=http/1.1#{userFullName}";
+                break;
+            case 'VLESS_WS':
+                return "vless://{userRandomKey}@" . $ip . ":443?encryption=none&security=tls&type=ws&host=" . $ip . "&sni=" . $ip . "&path=/uodlws#{userFullName}";
+                break;
+            case 'VMess_WS':
+                return false;
+                break;
+        }
+    }
+
 }
