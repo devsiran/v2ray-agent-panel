@@ -6,9 +6,9 @@ import os
 
 # <Config Vars>
 servers_hash = [
-#INSERT_SERVER_HASH#
+{SERVER_HASH_HERE}
 ]
-apiAddress = "http://localhost:8080/s/"
+apiAddress = "{ADMIN_ADDRESS_HERE}"
 # </Config Vars>
 
 servers_hash = json.dumps(servers_hash)
