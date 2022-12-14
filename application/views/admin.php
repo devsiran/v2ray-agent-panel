@@ -318,6 +318,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                                         <label for="newServerAddress" class="form-control-label">آدرس دامنه</label>
                                         <input placeholder="test.example.com" required class="form-control" type="text" name="newServerAddress" id="newServerAddress">
                                     </div>
+                                    <div class="form-group">
+                                        <label for="installpath" class="form-control-label">محل نصب v2ray-agent</label>
+                                        <input required class="form-control" type="text" name="installpath" id="installpath">
+                                    </div>
                                     <div class="row">
                                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                             <label class="custom-toggle">

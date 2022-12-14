@@ -233,11 +233,12 @@ class Welcome extends CI_Controller {
 			}
 			else if($page=="servers"){
 				$this->load->model("server");
-				if(isset($_POST['newServerName'],$_POST['newServerDesc'],$_POST['newServerAddress'])){
+				if(isset($_POST['newServerName'],$_POST['newServerDesc'],$_POST['newServerAddress'],$_POST['installpath'])){
 					if($canEdit){
 						$newServerName = $_POST['newServerName'];
 						$newServerDesc = $_POST['newServerDesc'];
 						$newServerAddress = $_POST['newServerAddress'];
+						$installpath = $_POST['installpath'];
 						$protocols = [];
 						if(isset($_POST['nsp_trojan_gRPC'])){
 							$protocols['trojan_gRPC'] = $this->getRandomKey("trojan_gRPC");
@@ -254,7 +255,7 @@ class Welcome extends CI_Controller {
 						if(isset($_POST['nsp_VLESS_WS'])){
 							$protocols['VLESS_WS'] = $this->getRandomKey("VLESS_WS");
 						}
-						$res = $this->setupNewServer($me,$newServerName,$newServerDesc,$newServerAddress,$protocols);
+						$res = $this->setupNewServer($me,$newServerName,$newServerDesc,$newServerAddress,$protocols,$installpath);
 						if($res===true){
 							array_push($messages,["success","سرور با موفقیت اضافه شد."]);
 						}
@@ -277,11 +278,11 @@ class Welcome extends CI_Controller {
 		return(md5($s . "/" . time() . rand(10000,9999999) . "DevsIran"));
 	}
 
-	private function setupNewServer($me,$name,$adminDesc,$ip,$protos){
+	private function setupNewServer($me,$name,$adminDesc,$ip,$protos,$installpath){
 		try{
 			// $admin_address = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . "/s/";
 			$this->load->model("server");
-			$this->server->addServers($me,$name,$adminDesc,$ip,$protos);
+			$this->server->addServers($me,$name,$adminDesc,$ip,$protos,$installpath);
 			return true;
 			// include_once(APPPATH . "/ssh/Net/SSH2.php");
 			// $ssh = new Net_SSH2($ip);

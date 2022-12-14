@@ -73,12 +73,12 @@ class Server extends CI_Model{
         return false;
     }
 
-    public function addServers($me,$name,$adminDesc,$ip,$protos){
+    public function addServers($me,$name,$adminDesc,$ip,$protos,$installpath){
         foreach($protos as $key=>$val){
             $data = [
                 "name" => $name,
                 "adminDesc" => $adminDesc,
-                "serverConfig" => $this->getServerConfig($name,$ip,$key),
+                "serverConfig" => $this->getServerConfig($name,$ip,$key,$installpath),
                 "serverIP" => $ip,
                 "serverHash" => $val,
                 "serverProto" => $key
@@ -93,13 +93,13 @@ class Server extends CI_Model{
         }
     }
 
-    private function getServerConfig($serverName,$ip,$proto){
+    private function getServerConfig($serverName,$ip,$proto,$installpath){
         switch($proto){
             case 'trojan_gRPC':
-                return "trojan://{userRandomKey}@" . $ip . ":443?encryption=none&peer=" . $ip . "&security=tls&type=grpc&sni=" . $ip . "&alpn=h2&path=uodltrojangrpc&serviceName=uodltrojangrpc#{userFullName}";
+                return "trojan://{userRandomKey}@" . $ip . ":443?encryption=none&peer=" . $ip . "&security=tls&type=grpc&sni=" . $ip . "&alpn=h2&path=" . $installpath . "trojangrpc&serviceName=" . $installpath . "trojangrpc#{userFullName}";
                 break;
             case 'VLESS_gRPC':
-                return "vless://{userRandomKey}@" . $ip . ":443?encryption=none&security=tls&type=grpc&host=" . $ip . "&path=uodlgrpc&serviceName=uodlgrpc&alpn=h2&sni=" . $ip . "#{userFullName}";
+                return "vless://{userRandomKey}@" . $ip . ":443?encryption=none&security=tls&type=grpc&host=" . $ip . "&path=" . $installpath . "grpc&serviceName=" . $installpath . "grpc&alpn=h2&sni=" . $ip . "#{userFullName}";
                 break;
             case 'VLESS_TCP':
                 return "vless://{userRandomKey}@" . $ip . ":443?encryption=none&security=xtls&type=tcp&host=" . $ip . "&headerType=none&sni=" . $ip . "&flow=xtls-rprx-splice#{userFullName}";
@@ -108,7 +108,7 @@ class Server extends CI_Model{
                 return "trojan://{userRandomKey}@" . $ip . ":443?peer=" . $ip . "&sni=" . $ip . "&alpn=http/1.1#{userFullName}";
                 break;
             case 'VLESS_WS':
-                return "vless://{userRandomKey}@" . $ip . ":443?encryption=none&security=tls&type=ws&host=" . $ip . "&sni=" . $ip . "&path=/uodlws#{userFullName}";
+                return "vless://{userRandomKey}@" . $ip . ":443?encryption=none&security=tls&type=ws&host=" . $ip . "&sni=" . $ip . "&path=/" . $installpath . "ws#{userFullName}";
                 break;
             case 'VMess_WS':
                 return false;
