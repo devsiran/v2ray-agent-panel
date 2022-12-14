@@ -19,7 +19,10 @@ class Server extends CI_Model{
         foreach($res->result() as $row){
             $t = $this->getServerFromID($row->serverID);
             if($t!=false){
-                array_push($s,$t);
+                if(!array_key_exists($t->serverIP,$s)){
+                    $s[$t->serverIP] = [];
+                }
+                array_push($s[$t->serverIP],$t);
             }
         }
         return $s;

@@ -32,7 +32,7 @@ fi
 if [[ x"${release}" == x"centos" ]]; then
     yum install python3 pip3 -y
 else
-    apt install python3 pip3 -y
+    apt install python3 python3-pip -y
 fi
 
 pip3 install requests 

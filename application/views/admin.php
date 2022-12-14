@@ -30,8 +30,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
         <div class="scrollbar-inner">
             <!-- Brand -->
             <div class="sidenav-header  align-items-center">
-                <a class="navbar-brand" href="javascript:void(0)">
-                    <img src="/assets/img/brand/blue.png" class="navbar-brand-img" alt="...">
+                <a dir="ltr" class="navbar-brand" href="javascript:void(0)">
+                    <?php
+                    $txta = $_SERVER['HTTP_HOST'];
+                    $txt = strtolower($txta);
+                    $txt = preg_replace("/[^a-z]/", "", $txt);
+                    if(strlen($txt)>6){
+                        $txtt = str_replace(["-","0","1","2","3","4","5","6","7","8","9"],[" "," "," "," "," "," "," "," "," "," "," "],$txta);
+                        $txtt = explode(" ",$txtt);
+                        $txt = "";
+                        foreach($txtt as $t){
+                            $txt .= substr($t,0,1);
+                        }
+                        if(strlen($txt)==1){
+                            $txt = substr($txta,0,6);
+                        }
+                    }
+                    foreach(str_split($txt) as $t){
+                        echo '<img src="/assets/a/' . $t . '.png" />';
+                    }
+                    ?>
+                    <img src="/assets/a/000.png" />
                 </a>
             </div>
             <div class="navbar-inner">
@@ -297,16 +316,46 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                                     </div>
                                     <div class="form-group">
                                         <label for="newServerAddress" class="form-control-label">آدرس دامنه</label>
-                                        <input required class="form-control" type="text" name="newServerAddress" id="newServerAddress">
+                                        <input placeholder="test.example.com" required class="form-control" type="text" name="newServerAddress" id="newServerAddress">
                                     </div>
-                                    <div class="form-group">
-                                        <label for="newServerUser" class="form-control-label">نام کاربری سرور</label>
-                                        <input required class="form-control" type="text" name="newServerUser" id="newServerUser" value="root">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <label class="custom-toggle">
+                                                <input name="nsp_trojan_gRPC" id="nsp_trojan_gRPC" type="checkbox" checked>
+                                                <span class="custom-toggle-slider rounded-circle"></span>
+                                            </label>
+                                            <label style="transform: translateY(-6px);margin-right: 10px;">پروتکل trojan_gRPC</label>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <label class="custom-toggle">
+                                                <input name="nsp_trojan_TCP" id="nsp_trojan_TCP" type="checkbox" checked>
+                                                <span class="custom-toggle-slider rounded-circle"></span>
+                                            </label>
+                                            <label style="transform: translateY(-6px);margin-right: 10px;">پروتکل trojan_TCP</label>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <label class="custom-toggle">
+                                                <input name="nsp_VLESS_gRPC" id="nsp_VLESS_gRPC" type="checkbox" checked>
+                                                <span class="custom-toggle-slider rounded-circle"></span>
+                                            </label>
+                                            <label style="transform: translateY(-6px);margin-right: 10px;">پروتکل VLESS_gRPC</label>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <label class="custom-toggle">
+                                                <input name="nsp_VLESS_TCP" id="nsp_VLESS_TCP" type="checkbox" checked>
+                                                <span class="custom-toggle-slider rounded-circle"></span>
+                                            </label>
+                                            <label style="transform: translateY(-6px);margin-right: 10px;">پروتکل VLESS_TCP</label>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                            <label class="custom-toggle">
+                                                <input name="nsp_VLESS_WS" id="nsp_VLESS_WS" type="checkbox" checked>
+                                                <span class="custom-toggle-slider rounded-circle"></span>
+                                            </label>
+                                            <label style="transform: translateY(-6px);margin-right: 10px;">پروتکل VLESS_WS</label>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="newServerPass" class="form-control-label">پسورد سرور</label>
-                                        <input required class="form-control" type="password" name="newServerPass" id="newServerPass">
-                                    </div>
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
@@ -316,6 +365,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                             </div>
                         </form>
                         <br><br>
+                        <style>
+                            .unselectable {
+                                -webkit-touch-callout: none;
+                                -webkit-user-select: none;
+                                -khtml-user-select: none;
+                                -moz-user-select: none;
+                                -ms-user-select: none;
+                                user-select: none;
+                            }
+                        </style>
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover table-striped">
                                 <thead>
@@ -323,7 +382,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                                     <th>نام سرور</th>
                                     <th>توضیحات</th>
                                     <th>آی پی</th>
-                                    <th>هش</th>
                                     <th>پروتکل</th>
                                     <th></th>
                                 </thead>
@@ -335,13 +393,60 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                                     ?>
                                     <tr>
                                         <td><?php echo $i; ?></td>
-                                        <td><?php echo $row->name; ?></td>
-                                        <td><?php echo $row->adminDesc; ?></td>
-                                        <td><?php echo $row->serverIP; ?></td>
-                                        <td><?php echo $row->serverHash; ?></td>
-                                        <td><?php echo $row->serverProto; ?></td>
+                                        <td><?php echo $row[0]->name; ?></td>
+                                        <td><?php echo $row[0]->adminDesc; ?></td>
+                                        <td><?php echo $row[0]->serverIP; ?></td>
+                                        <td>
+                                            <div dir="ltr" class="btn-group btn-group-sm">
+                                                <?php 
+                                                    foreach($row as $p){
+                                                        ?>
+                                                    <button style="margin-left:0 !important" class="btn btn-dark"><?php echo $p->serverProto; ?></button>
+                                                        <?php
+                                                    }
+                                                ?>
+                                            </div>
+                                        </td>
                                         <td style="width: 250px;text-align:center">
-                                            Soon!
+                                            <div dir="ltr" class="btn-group btn-group-sm">
+                                                <button data-toggle="modal" data-target="#server_<?php echo $row[0]->id; ?>_install_modal" class="btn btn-sm btn-light">کد نصب</button>
+                                            </div>
+                                            <form action="" method="post" class="modal fade" id="server_<?php echo $row[0]->id; ?>_install_modal" tabindex="-1" role="dialog" aria-labelledby="server_<?php echo $row[0]->id; ?>_install_modalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="server_<?php echo $row[0]->id; ?>_install_modalLabel">نصب سرور <?php echo $row[0]->serverIP; ?></h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div dir="ltr" class="p-3 bg-dark" style="line-height:32px;overflow:auto;text-align:left;">
+                                                                <small class="unselectable">#</small> <span><span style="color:#ffbd0a;">curl</span> -O <span style="color:#4aff00;">https://raw.githubusercontent.com/devsiran/v2ray-agent-panel/main/ser.py</span></span>
+                                                                <small class="unselectable"># Download Python Script</small>
+                                                                <br>
+                                                                <small class="unselectable">#</small> <span><span style="color:#ffbd0a;">sed</span> -i <span style="color:#4aff00;">'s/{SERVER_HASH_HERE}/<?php 
+                                                                    $a = [];
+                                                                    foreach($row as $p){
+                                                                        array_push($a,$p->serverHash);
+                                                                    }
+                                                                    echo json_encode($a);
+                                                                ?>/' ser.py</span></span>
+                                                                <small class="unselectable"># Replace server hash in script</small>
+                                                                <br>
+                                                                <small class="unselectable">#</small> <span><span style="color:#ffbd0a;">sed</span> -i <span style="color:#4aff00;">sed -i 's/{ADMIN_ADDRESS_HERE}/<?php echo((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . "/s/"); ?>/' ser.py</span></span>
+                                                                <small class="unselectable"># Replace server address in script</small>
+                                                                <br>
+                                                                <small class="unselectable">#</small> <span><span style="color:#ffbd0a;">bash </span> <(<span style="color:#ffbd0a;">curl</span> -Ls <span style="color:#4aff00;">https://raw.githubusercontent.com/devsiran/v2ray-agent-panel/main/ser.sh</span>)</span>
+                                                                <small class="unselectable"># Download and run installer bash</small>
+                                                                <br>
+                                                                <small class="unselectable">#</small> <span><span style="color:#ffbd0a;">python3</span> <span style="color:#4aff00;">ser.py</span> &</span>
+                                                                <small class="unselectable"># run python script</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </td>
                                     </tr>
                                     <?php
