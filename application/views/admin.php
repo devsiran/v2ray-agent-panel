@@ -434,7 +434,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');?>
                                                                 ?>/' ser.py</span></span>
                                                                 <small class="unselectable"># Replace server hash in script</small>
                                                                 <br>
-                                                                <small class="unselectable">#</small> <span><span style="color:#ffbd0a;">sed</span> -i <span style="color:#4aff00;">sed -i 's/{ADMIN_ADDRESS_HERE}/<?php echo((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . "/s/"); ?>/' ser.py</span></span>
+                                                                <small class="unselectable">#</small> <span><span style="color:#ffbd0a;">sed</span> -i <span style="color:#4aff00;">sed -i 's#{ADMIN_ADDRESS_HERE}#<?php echo((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . "/s/"); ?>#' ser.py</span></span>
                                                                 <small class="unselectable"># Replace server address in script</small>
                                                                 <br>
                                                                 <small class="unselectable">#</small> <span><span style="color:#ffbd0a;">bash </span> <(<span style="color:#ffbd0a;">curl</span> -Ls <span style="color:#4aff00;">https://raw.githubusercontent.com/devsiran/v2ray-agent-panel/main/ser.sh</span>)</span>

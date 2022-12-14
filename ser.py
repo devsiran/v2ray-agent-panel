@@ -18,8 +18,8 @@ def make_trojan_gRPC(us):
     inbounds = []
     for u in us:
         inbounds.append({
-            "email" : str(u.randomKey) + "@mylast.tk" ,
-            "password": str(u.randomKey)
+            "email" : str(u['randomKey']) + "@mylast.tk" ,
+            "password": str(u['randomKey'])
         })
     f = open(confFile, "r")
     myf = json.loads(f.read())
@@ -38,8 +38,8 @@ def make_VLESS_gRPC(us):
     inbounds = []
     for u in us:
         inbounds.append({
-            "email" : str(u.randomKey) + "@mylast.tk" ,
-            "id": str(u.randomKey)
+            "email" : str(u['randomKey']) + "@mylast.tk" ,
+            "id": str(u['randomKey'])
         })
     f = open(confFile, "r")
     myf = json.loads(f.read())
@@ -58,9 +58,9 @@ def make_VLESS_TCP(us):
     inbounds = []
     for u in us:
         inbounds.append({
-            "email" : str(u.randomKey) + "@mylast.tk",
+            "email" : str(u['randomKey']) + "@mylast.tk",
             "flow": "xtls-rprx-direct",
-            "id": str(u.randomKey)
+            "id": str(u['randomKey'])
         })
     f = open(confFile, "r")
     myf = json.loads(f.read())
@@ -79,8 +79,8 @@ def make_trojan_TCP(us):
     inbounds = []
     for u in us:
         inbounds.append({
-            "email" : str(u.randomKey) + "@mylast.tk",
-            "password": str(u.randomKey)
+            "email" : str(u['randomKey']) + "@mylast.tk",
+            "password": str(u['randomKey'])
         })
     f = open(confFile, "r")
     myf = json.loads(f.read())
@@ -99,8 +99,8 @@ def make_VLESS_WS(us):
     inbounds = []
     for u in us:
         inbounds.append({
-            "email" : str(u.randomKey) + "@mylast.tk",
-            "id": str(u.randomKey)
+            "email" : str(u['randomKey']) + "@mylast.tk",
+            "id": str(u['randomKey'])
         })
     f = open(confFile, "r")
     myf = json.loads(f.read())
@@ -119,8 +119,8 @@ def make_VMess_WS(us):
     inbounds = []
     for u in us:
         inbounds.append({
-            "email" : str(u.randomKey) + "@mylast.tk",
-            "id": str(u.randomKey),
+            "email" : str(u['randomKey']) + "@mylast.tk",
+            "id": str(u['randomKey']),
             "alterId": 0
         })
     f = open(confFile, "r")
