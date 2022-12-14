@@ -289,15 +289,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');?><!DOCTYPE html>
                     </div>
                     <div class="row">
                     <?php
-                    foreach($panelInfo['servers'] as $row){
-                      echo '<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">';
+                    $sers = [];
+                    foreach($panelInfo['servers'] as $kk=>$ss){
+                      foreach($ss as $rr){
+                        array_push($sers,$rr);
+                      }
+                    }
+                    foreach($sers as $row){
+                      echo '<div class="col-12">';
                       ?>
                       <label class="custom-toggle">
                         <input name="servers[<?php echo $row->id; ?>]" type="checkbox" checked>
                         <span class="custom-toggle-slider rounded-circle"></span>
                       </label>
                       <?php
-                      echo '<label style="transform: translateY(-6px);margin-right: 10px;">' . $row->name . '</label>';
+                      echo '<label style="transform: translateY(-6px);margin-right: 10px;">' . $row->name . ' <small class="text-gray">' . $row->serverProto . '</small></label>';
                       echo '</div>';
                     }
                     ?>
